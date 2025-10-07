@@ -26,13 +26,16 @@
   "scripts": {
     "client": "react-scripts start",
     "server": "node proxy-server.js",
-    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "start": "NODE_OPTIONS=--openssl-legacy-provider concurrently \"npm run server\" \"npm run client\"",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "concurrently": "^5.0.0"
+    "concurrently": "^5.3.0"
+  },
+  "overrides": {
+    "ajv": "^6.12.6"
   },
   "browserslist": {
     "production": [
