@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-  ExpansionPanel,
-  ExpansionPanelSummary,
+  Accordion, 
+  AccordionSummary, 
+  AccordionDetails,
   Typography,
-  ExpansionPanelDetails,
   List,
   ListItem,
   ListItemText,
@@ -20,13 +20,14 @@ import {
   Switch,
   Divider,
   Tooltip
-} from '@material-ui/core';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import AddIcon from '@material-ui/icons/Add';
-import DeleteIcon from '@material-ui/icons/Delete';
-import RefreshIcon from '@material-ui/icons/Refresh';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+} from '@mui/material';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import _ from 'lodash';
 import { JsonToTable } from 'react-json-to-table';
 import { ACTIONS, COMMON_GREMLIN_ERROR, QUERY_ENDPOINT } from '../../constants';
@@ -34,7 +35,22 @@ import axios from "axios";
 import { onFetchQuery} from '../../logics/actionHelper';
 import { stringifyObjectValues} from '../../logics/utils';
 
+
+
 class Details extends React.Component {
+
+  componentDidUpdate(prevProps, prevState) {
+    // If the node array from Redux has changed, update the DataSet.
+//     console.log("in Details  componentDidUpdate")
+ }
+
+shouldComponentUpdate(nextProps, nextState) {
+
+    // If the node array from Redux has changed, update the DataSet.
+//     console.log("in Details  shouldComponentUpdate")
+  return true;
+
+ }
 
   onAddNodeLabel() {
     this.props.dispatch({ type: ACTIONS.ADD_NODE_LABEL });
@@ -58,6 +74,8 @@ class Details extends React.Component {
 
   onTraverse(nodeId, direction) {
     const query = `g.V('${nodeId}').${direction}()`;
+ //   console.log(`query=${query}`);
+ //   console.log(`Processing user data: ${JSON.stringify("{ host: this.props.host, port: this.props.port, query: query, nodeLimit: this.props.nodeLimit }")}`);
     axios.post(
       QUERY_ENDPOINT,
       { host: this.props.host, port: this.props.port, query: query, nodeLimit: this.props.nodeLimit },
@@ -65,6 +83,7 @@ class Details extends React.Component {
     ).then((response) => {
       onFetchQuery(response, query, this.props.nodeLabels, this.props.dispatch);
     }).catch((error) => {
+      console.log(`Processing ERROR: ${JSON.stringify(error)}`);
       this.props.dispatch({ type: ACTIONS.SET_ERROR, payload: COMMON_GREMLIN_ERROR });
     });
   }
@@ -151,32 +170,32 @@ class Details extends React.Component {
     return (
       <div className={'details'}>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={12} md={12}>
-            <ExpansionPanel>
-              <ExpansionPanelSummary
+          <Grid  size={{ xs:12, sm: 12 , md: 12 }}>
+            <Accordion>
+              <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1a-content"
                 id="panel1a-header"
               >
                 <Typography>Query History</Typography>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails>
+              </AccordionSummary>
+              <AccordionDetails>
                 <List dense={true}>
                   {this.generateList(this.props.queryHistory)}
                 </List>
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
-            <ExpansionPanel>
-              <ExpansionPanelSummary
+              </AccordionDetails>
+            </Accordion>
+            <Accordion>
+              <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1a-content"
                 id="panel1a-header"
               >
                 <Typography>Settings</Typography>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails>
+              </AccordionSummary>
+              <AccordionDetails>
                 <Grid container spacing={2}>
-                  <Grid item xs={12} sm={12} md={12}>
+                  <Grid  size={{ xs:12, sm: 12 , md: 12 }}>
                     <Tooltip title="Automatically stabilize the graph" aria-label="add">
                     <FormControlLabel
                       control={
@@ -192,7 +211,7 @@ class Details extends React.Component {
                     </Tooltip>
                     <Divider />
                   </Grid>
-                  <Grid item xs={12} sm={12} md={12}>
+                  <Grid  size={{ xs:12, sm: 12 , md: 12 }}>
                     <Tooltip title="Number of maximum nodes which should return from the query. Empty or 0 has no restrictions." aria-label="add">
                       <TextField label="Node Limit" type="Number" variant="outlined" value={this.props.nodeLimit} onChange={event => {
                         const limit = event.target.value;
@@ -201,18 +220,18 @@ class Details extends React.Component {
                     </Tooltip>
 
                   </Grid>
-                  <Grid item xs={12} sm={12} md={12}>
+                  <Grid  size={{ xs:12, sm: 12 , md: 12 }}>
                     <Divider />
                   </Grid>
-                  <Grid item xs={12} sm={12} md={12}>
+                  <Grid  size={{ xs:12, sm: 12 , md: 12 }}>
                     <Typography>Node Labels</Typography>
                   </Grid>
-                  <Grid item xs={12} sm={12} md={12}>
+                  <Grid  size={{ xs:12, sm: 12 , md: 12 }}>
                     <List dense={true}>
                       {this.generateNodeLabelList(this.props.nodeLabels)}
                     </List>
                   </Grid>
-                  <Grid item xs={12} sm={12} md={12}>
+                  <Grid  size={{ xs:12, sm: 12 , md: 12 }}>
                     <Fab variant="extended" color="primary" size="small" onClick={this.onRefresh.bind(this)}>
                       <RefreshIcon />
                       Refresh
@@ -223,22 +242,22 @@ class Details extends React.Component {
                     </Fab>
                   </Grid>
                 </Grid>
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
+              </AccordionDetails>
+            </Accordion>
           </Grid>
           {hasSelected &&
-          <Grid item xs={12} sm={12} md={12}>
+          <Grid  size={{ xs:12, sm: 12 , md: 12 }}>
             <h2>Information: {selectedHeader}</h2>
             {selectedHeader === 'Node' &&
-            <Grid item xs={12} sm={12} md={12}>
+            <Grid  size={{ xs:12, sm: 12 , md: 12 }}>
               <Grid container spacing={2}>
-                <Grid item xs={6} sm={6} md={6}>
+                <Grid  size={{ xs:6, sm: 6 , md: 6 }}>
                   <Fab variant="extended" size="small" onClick={() => this.onTraverse(selectedId, 'out')}>
                     Traverse Out Edges
                     <ArrowForwardIcon/>
                   </Fab>
                 </Grid>
-                <Grid item xs={6} sm={6} md={6}>
+                <Grid size={{ xs:6, sm: 6 , md: 6 }}>
                   <Fab variant="extended" size="small" onClick={() => this.onTraverse(selectedId, 'in')}>
                     Traverse In Edges
                     <ArrowBackIcon/>
@@ -247,7 +266,7 @@ class Details extends React.Component {
               </Grid>
             </Grid>
             }
-            <Grid item xs={12} sm={12} md={12}>
+            <Grid size={{ xs:12, sm: 12 , md: 12 }}>
               <Grid container>
                 <Table aria-label="simple table">
                   <TableBody>

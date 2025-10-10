@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Button, TextField }  from '@material-ui/core';
+import { Button, TextField }  from '@mui/material';
 import axios from 'axios';
 import { ACTIONS, QUERY_ENDPOINT, COMMON_GREMLIN_ERROR } from '../../constants';
 import { onFetchQuery } from '../../logics/actionHelper';
@@ -11,18 +11,52 @@ class Header extends React.Component {
     this.props.dispatch({ type: ACTIONS.CLEAR_QUERY_HISTORY });
   }
 
-  sendQuery() {
-    this.props.dispatch({ type: ACTIONS.SET_ERROR, payload: null });
-    axios.post(
+  // Refactored to be an async function for better readability
+async sendQuery() {
+//  console.log("in sendQuery()");
+//  console.log(`Processing user data: ${JSON.stringify(this.props)}`);
+
+  this.props.dispatch({ type: ACTIONS.SET_ERROR, payload: null });
+
+  try {
+    // Use 'await' to wait for the post request to resolve
+    const response = await axios.post(
       QUERY_ENDPOINT,
-      { host: this.props.host, port: this.props.port, query: this.props.query, nodeLimit: this.props.nodeLimit },
+      {
+        host: this.props.host,
+        port: this.props.port,
+        query: this.props.query,
+        nodeLimit: this.props.nodeLimit,
+      },
       { headers: { 'Content-Type': 'application/json' } }
-    ).then((response) => {
-      onFetchQuery(response, this.props.query, this.props.nodeLabels, this.props.dispatch);
-    }).catch((error) => {
-      this.props.dispatch({ type: ACTIONS.SET_ERROR, payload: COMMON_GREMLIN_ERROR });
+    );
+
+    // This code runs only after the await is successful (replaces .then())
+    onFetchQuery(
+      response,
+      this.props.query,
+      [...this.props.nodeLabels],
+//      this.props.nodeLabels,
+      this.props.dispatch
+    );
+
+  } catch (error) {
+    // The catch block handles any errors from the axios call (replaces .catch())
+    if (error.response) {
+      console.error('Response Data:', error.response.data);
+      console.error('Status Code:', error.response.status);
+    } else if (error.request) {
+      console.error('No response received:', error.request);
+    } else {
+      console.error('Error Message:', error.message);
+    }
+
+    this.props.dispatch({
+      type: ACTIONS.SET_ERROR,
+      payload: COMMON_GREMLIN_ERROR,
     });
   }
+}
 
   onHostChanged(host) {
     this.props.dispatch({ type: ACTIONS.SET_HOST, payload: host });
@@ -37,6 +71,7 @@ class Header extends React.Component {
   }
 
   render(){
+//        console.log("in header render");
     return (
       <div className={'header'}>
         <form noValidate autoComplete="off">
