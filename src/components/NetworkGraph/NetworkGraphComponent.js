@@ -59,7 +59,6 @@ class NetworkGraph extends React.Component {
 //     console.log(`this.props=${JSON.stringify(this.props)}`)
 
     if (this.props.nodes !== prevProps.nodes) {
-//        console.log("Node data updated:", this.props.nodes);
 
       this.nodes.clear();
       this.nodes.add(this.props.nodes);
@@ -67,7 +66,6 @@ class NetworkGraph extends React.Component {
 
     // If the edge array from Redux has changed, update the DataSet.
     if (this.props.edges !== prevProps.edges) {
-//        console.log("Edge data updated:", this.props.edges);
 
       this.edges.clear();
       this.edges.add(this.props.edges);
@@ -87,6 +85,5 @@ export const NetworkGraphComponent = connect((state) => {
     nodes: state.graph.nodes,
     edges: state.graph.edges,
     networkOptions: state.options.networkOptions,
-    FUCKME: "YES",
   };
 })(NetworkGraph);
