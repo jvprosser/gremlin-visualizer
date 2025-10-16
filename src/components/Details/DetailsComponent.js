@@ -116,33 +116,47 @@ shouldComponentUpdate(nextProps, nextState) {
     });
   }
 
-  generateNodeLabelList(nodeLabels) {
-    let index = -1;
-    return nodeLabels.map( nodeLabel => {
-      index = index+1;
-      nodeLabel.index = index;
-      return React.cloneElement((
-        <ListItem>
-          <TextField id="standard-basic" label="Node Type" InputLabelProps={{ shrink: true }} value={nodeLabel.type} onChange={event => {
+generateNodeLabelList(nodeLabels) {
+  // Use the index from the map function's second argument
+  return nodeLabels.map((originalNodeLabel, index) => {
+
+    // ✅ Create a new object with the original properties plus the new index
+    const nodeLabel = { ...originalNodeLabel, index };
+
+    // Now, use this new 'nodeLabel' object for the rest of your logic
+    return React.cloneElement((
+      <ListItem>
+        <TextField
+          id="standard-basic"
+          label="Node Type"
+          InputLabelProps={{ shrink: true }}
+          value={nodeLabel.type}
+          onChange={event => {
             const type = event.target.value;
             const field = nodeLabel.field;
             this.onEditNodeLabel(nodeLabel.index, { type, field })
           }}
-          />
-          <TextField id="standard-basic" label="Label Field" InputLabelProps={{ shrink: true }} value={nodeLabel.field} onChange={event => {
+        />
+        <TextField
+          id="standard-basic"
+          label="Label Field"
+          InputLabelProps={{ shrink: true }}
+          value={nodeLabel.field}
+          onChange={event => {
             const field = event.target.value;
             const type = nodeLabel.type;
             this.onEditNodeLabel(nodeLabel.index, { type, field })
-          }}/>
-          <IconButton aria-label="delete" size="small" onClick={() => this.onRemoveNodeLabel(nodeLabel.index)}>
-            <DeleteIcon fontSize="small" />
-          </IconButton>
-        </ListItem>
-      ), {
-        key: index
-      })
+          }}
+        />
+        <IconButton aria-label="delete" size="small" onClick={() => this.onRemoveNodeLabel(nodeLabel.index)}>
+          <DeleteIcon fontSize="small" />
+        </IconButton>
+      </ListItem>
+    ), {
+      key: index
     });
-  }
+  });
+}
 
   render(){
     let hasSelected = false;
