@@ -1,5 +1,6 @@
 # Gremlin-Visualizer
 This project is to visualize the graph network corresponding to a gremlin query.
+Split the backend interface to gremlin and the frontent react/redux code
 
 ![alt text](https://raw.githubusercontent.com/prabushitha/Readme-Materials/master/Gremlin-Visualizer.png)
 
