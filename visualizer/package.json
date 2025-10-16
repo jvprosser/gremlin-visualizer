@@ -1,0 +1,50 @@
+{
+  "name": "gremlin-visualizer",
+  "version": "1.0.0",
+  "author": "Umesh Jayasinghe",
+  "description": "Visualize graph network corresponding to a gremlin query",
+  "license": "MIT",
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/icons-material": "^7.3.4",
+    "@mui/material": "^7.3.4",
+    "@reduxjs/toolkit": "^2.9.0",
+    "axios": "^1.12.2",
+    "lodash": "^4.17.21",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-json-to-table": "^0.1.7",
+    "react-redux": "^9.2.0",
+    "react-scripts": "^5.0.1",
+    "redux": "^5.0.1",
+    "redux-logger": "^3.0.6",
+    "vis-network": "^10.0.2"
+  },
+  "proxy": "http://localhost:3001",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "overrides": {
+    "react": "$react",
+    "react-dom": "$react-dom"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
