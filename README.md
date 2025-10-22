@@ -12,7 +12,7 @@ git clone https://github.com/jvprosser/gremlin-visualizer.git
 ```
 * Install dependencies
 ```sh
-npm install --legacy-peer-deps
+npm install
 ```
 * Run the project
 ```sh
